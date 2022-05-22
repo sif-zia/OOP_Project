@@ -136,6 +136,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="Cell.png" />
+    <Image Include="flag.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

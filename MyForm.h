@@ -43,23 +43,8 @@ namespace OOPProject {
 	public: System::Windows::Forms::Label^ label1;
 	private: int rows, cols, cell_size, initial_x, initial_y;
 	public: cli::array<Button^, 2>^ btns;
-	private: System::Windows::Forms::Button^ button1;
+
 	private: ImageList^ Img;
-	public:
-
-	public:
-
-	public:
-
-	public:
-
-	public:
-
-	public:
-
-	protected:
-
-	private:
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -72,9 +57,7 @@ namespace OOPProject {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(MyForm::typeid));
 			this->label1 = (gcnew System::Windows::Forms::Label());
-			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->SuspendLayout();
 			// 
 			// label1
@@ -85,26 +68,11 @@ namespace OOPProject {
 			this->label1->Size = System::Drawing::Size(0, 16);
 			this->label1->TabIndex = 0;
 			// 
-			// button1
-			// 
-			this->button1->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"button1.BackgroundImage")));
-			this->button1->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
-			this->button1->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->button1->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(184)), static_cast<System::Int32>(static_cast<System::Byte>(184)),
-				static_cast<System::Int32>(static_cast<System::Byte>(184)));
-			this->button1->Location = System::Drawing::Point(839, 98);
-			this->button1->Name = L"button1";
-			this->button1->Size = System::Drawing::Size(57, 58);
-			this->button1->TabIndex = 1;
-			this->button1->Text = L"button1";
-			this->button1->UseVisualStyleBackColor = true;
-			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(908, 680);
-			this->Controls->Add(this->button1);
+			this->ClientSize = System::Drawing::Size(928, 749);
 			this->Controls->Add(this->label1);
 			this->Name = L"MyForm";
 			this->Text = L"MyForm";
@@ -120,24 +88,28 @@ namespace OOPProject {
 		Img = gcnew ImageList;
 		Img->ImageSize = System::Drawing::Size(cell_size+1, cell_size+1);
 		Img->Images->Add(Image::FromFile("Cell.png"));
+		Img->Images->Add(Image::FromFile("flag.png"));
 
 		for (int i = 0; i < rows; i++)
 			for (int j = 0; j < cols; j++) {
 				btns[i, j] = gcnew Button();
 				btns[i, j]->CausesValidation = false;
-				btns[i, j]->Location = System::Drawing::Point(initial_x + (i * cell_size), initial_y + (j * cell_size));
-				btns[i, j]->Name = i.ToString() + j.ToString();
+				btns[i, j]->Location = System::Drawing::Point(initial_x + (j * cell_size), initial_y + (i * cell_size));
+				btns[i, j]->Name = L"-" + i.ToString() + L"-" + j.ToString();
 				btns[i, j]->Size = System::Drawing::Size(cell_size, cell_size);
 				btns[i, j]->TabStop = false;
 				btns[i, j]->TabIndex = (i * cols) + j;
-				btns[i, j]->Text = i.ToString() + j.ToString();
+				btns[i, j]->Text = L"-" + i.ToString() + L"-" + j.ToString();
 				btns[i, j]->UseVisualStyleBackColor = true;
 				btns[i, j]->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
 				btns[i, j]->Cursor = System::Windows::Forms::Cursors::Hand;
 				btns[i, j]->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(184)), static_cast<System::Int32>(static_cast<System::Byte>(184)),
 					static_cast<System::Int32>(static_cast<System::Byte>(184)));
+				btns[i, j]->Font = (gcnew System::Drawing::Font(L"Microsoft Uighur", 7.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+					static_cast<System::Byte>(0)));
+				btns[i, j]->TextAlign = System::Drawing::ContentAlignment::MiddleRight;
 				btns[i, j]->BackgroundImage = Img->Images[0];
-				btns[i, j]->Click += gcnew System::EventHandler(this, &MyForm::button_Click);
+				btns[i, j]->MouseUp += gcnew System::Windows::Forms::MouseEventHandler(this, &OOPProject::MyForm::OnMouseUp);
 			}
 
 		for (int i = 0; i < rows; i++)
@@ -151,15 +123,26 @@ namespace OOPProject {
 			   outStr = (const char*)ansiStr.ToPointer();
 			   System::Runtime::InteropServices::Marshal::FreeHGlobal(ansiStr);
 	}
-	public: System::Void button_Click(System::Object^ sender, System::EventArgs^ e) {
+	public: System::Void OOPProject::MyForm::OnMouseUp(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e)
+	{
 		std::string text;
 		ClrStringToStdString(text, sender->ToString());
-		int x = text[text.length() - 2] - '0';
-		int y = text[text.length() - 1] - '0';
-		label1->Text = x.ToString() + y.ToString();
-		btns[x, y]->Visible = false;
-	}
-	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
+		int first_dash = text.find('-', 0);
+		int second_dash = text.find('-', first_dash+1);
+		std::string text_x = text.substr(first_dash + 1, second_dash - first_dash - 1);
+		std::string text_y = text.substr(second_dash + 1, text.length() - second_dash - 1);
+		int x = std::stoi(text_x);
+		int y = std::stoi(text_y);
+		label1->Text = x.ToString() + "-" + y.ToString();
+		
+		switch (e->Button) {
+		case (System::Windows::Forms::MouseButtons::Left):
+			btns[x, y]->Visible = false;
+			break;
+		case (System::Windows::Forms::MouseButtons::Right):
+			btns[x, y]->BackgroundImage = Img->Images[1];
+			break;
+		}
 	}
 };
 }
