@@ -24,7 +24,7 @@ namespace OOPProject {
 			//
 			rows = 10;
 			cols = 10;
-			cell_size = 40;
+			cell_size = 52;
 			initial_x = 50;
 			initial_y = 50;
 		}
@@ -43,6 +43,13 @@ namespace OOPProject {
 	public: System::Windows::Forms::Label^ label1;
 	private: int rows, cols, cell_size, initial_x, initial_y;
 	public: cli::array<Button^, 2>^ btns;
+	private: System::Windows::Forms::Button^ button1;
+	private: ImageList^ Img;
+	public:
+
+	public:
+
+	public:
 
 	public:
 
@@ -65,7 +72,9 @@ namespace OOPProject {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(MyForm::typeid));
 			this->label1 = (gcnew System::Windows::Forms::Label());
+			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->SuspendLayout();
 			// 
 			// label1
@@ -76,11 +85,26 @@ namespace OOPProject {
 			this->label1->Size = System::Drawing::Size(0, 16);
 			this->label1->TabIndex = 0;
 			// 
+			// button1
+			// 
+			this->button1->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"button1.BackgroundImage")));
+			this->button1->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
+			this->button1->Cursor = System::Windows::Forms::Cursors::Hand;
+			this->button1->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(184)), static_cast<System::Int32>(static_cast<System::Byte>(184)),
+				static_cast<System::Int32>(static_cast<System::Byte>(184)));
+			this->button1->Location = System::Drawing::Point(839, 98);
+			this->button1->Name = L"button1";
+			this->button1->Size = System::Drawing::Size(57, 58);
+			this->button1->TabIndex = 1;
+			this->button1->Text = L"button1";
+			this->button1->UseVisualStyleBackColor = true;
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(908, 680);
+			this->Controls->Add(this->button1);
 			this->Controls->Add(this->label1);
 			this->Name = L"MyForm";
 			this->Text = L"MyForm";
@@ -93,6 +117,10 @@ namespace OOPProject {
 	private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e) {
 		btns = gcnew cli::array<Button^, 2>(rows, cols);
 
+		Img = gcnew ImageList;
+		Img->ImageSize = System::Drawing::Size(cell_size+1, cell_size+1);
+		Img->Images->Add(Image::FromFile("Cell.png"));
+
 		for (int i = 0; i < rows; i++)
 			for (int j = 0; j < cols; j++) {
 				btns[i, j] = gcnew Button();
@@ -104,6 +132,11 @@ namespace OOPProject {
 				btns[i, j]->TabIndex = (i * cols) + j;
 				btns[i, j]->Text = i.ToString() + j.ToString();
 				btns[i, j]->UseVisualStyleBackColor = true;
+				btns[i, j]->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
+				btns[i, j]->Cursor = System::Windows::Forms::Cursors::Hand;
+				btns[i, j]->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(184)), static_cast<System::Int32>(static_cast<System::Byte>(184)),
+					static_cast<System::Int32>(static_cast<System::Byte>(184)));
+				btns[i, j]->BackgroundImage = Img->Images[0];
 				btns[i, j]->Click += gcnew System::EventHandler(this, &MyForm::button_Click);
 			}
 
@@ -126,5 +159,7 @@ namespace OOPProject {
 		label1->Text = x.ToString() + y.ToString();
 		btns[x, y]->Visible = false;
 	}
-	};
+	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
+	}
+};
 }
