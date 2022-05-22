@@ -43,9 +43,11 @@ namespace OOPProject {
 	public: System::Windows::Forms::Label^ label1;
 	private: int rows, cols, cell_size, initial_x, initial_y;
 	public: cli::array<Button^, 2>^ btns;
-
+	private: cli::array<PictureBox^, 2>^ exp_cels;
 	private: ImageList^ Img;
-		/// <summary>
+
+
+		   /// <summary>
 		/// Required designer variable.
 		/// </summary>
 		System::ComponentModel::Container ^components;
@@ -72,6 +74,8 @@ namespace OOPProject {
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
+			this->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(182)), static_cast<System::Int32>(static_cast<System::Byte>(182)),
+				static_cast<System::Int32>(static_cast<System::Byte>(182)));
 			this->ClientSize = System::Drawing::Size(928, 749);
 			this->Controls->Add(this->label1);
 			this->Name = L"MyForm";
@@ -84,11 +88,13 @@ namespace OOPProject {
 #pragma endregion
 	private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e) {
 		btns = gcnew cli::array<Button^, 2>(rows, cols);
+		exp_cels = gcnew cli::array<PictureBox^, 2>(rows, cols);
 
 		Img = gcnew ImageList;
-		Img->ImageSize = System::Drawing::Size(cell_size+1, cell_size+1);
+		Img->ImageSize = System::Drawing::Size(cell_size-1, cell_size-1);
 		Img->Images->Add(Image::FromFile("Cell.png"));
 		Img->Images->Add(Image::FromFile("flag.png"));
+		Img->Images->Add(Image::FromFile("empty_cell.png"));
 
 		for (int i = 0; i < rows; i++)
 			for (int j = 0; j < cols; j++) {
@@ -110,11 +116,22 @@ namespace OOPProject {
 				btns[i, j]->TextAlign = System::Drawing::ContentAlignment::MiddleRight;
 				btns[i, j]->BackgroundImage = Img->Images[0];
 				btns[i, j]->MouseUp += gcnew System::Windows::Forms::MouseEventHandler(this, &OOPProject::MyForm::OnMouseUp);
+
+				exp_cels[i, j] = gcnew PictureBox;
+				exp_cels[i, j]->Location = System::Drawing::Point(initial_x + (j * cell_size), initial_y + (i * cell_size));
+				exp_cels[i, j]->Name = L"-" + i.ToString() + L"-" + j.ToString() + L"P";
+				exp_cels[i, j]->Size = System::Drawing::Size(cell_size, cell_size);
+				exp_cels[i, j]->TabStop = false;
+				exp_cels[i, j]->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
+				exp_cels[i, j]->Image = Img->Images[2];
 			}
 
 		for (int i = 0; i < rows; i++)
-			for (int j = 0; j < cols; j++)
+			for (int j = 0; j < cols; j++) {
+				Controls->Add(exp_cels[i, j]);
 				Controls->Add(btns[i, j]);
+				exp_cels[i, j]->SendToBack();
+			}
 	}
 
 

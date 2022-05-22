@@ -31,5 +31,8 @@
     <Image Include="flag.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="empty_cell.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
