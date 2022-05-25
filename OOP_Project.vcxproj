@@ -139,6 +139,7 @@
   <ItemGroup>
     <Image Include="1.jpeg" />
     <Image Include="2.jpeg" />
+    <Image Include="3.jpeg" />
     <Image Include="Cell.png" />
     <Image Include="empty_cell.png" />
     <Image Include="flag.png" />
