@@ -140,6 +140,8 @@
     <Image Include="Cell.png" />
     <Image Include="empty_cell.png" />
     <Image Include="flag.png" />
+    <Image Include="mine.jpeg" />
+    <Image Include="mine_red.jpeg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

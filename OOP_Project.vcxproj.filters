@@ -40,5 +40,11 @@
     <Image Include="empty_cell.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="mine.jpeg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="mine_red.jpeg">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

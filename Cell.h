@@ -1,11 +1,17 @@
 #pragma once
 
 ref class Cell abstract {
-protected:
+public:
+	// 
+	//	Data Members
+	//
 	bool is_flagged, is_exposed;
 	System::Windows::Forms::Button^ btn;
 	System::Windows::Forms::PictureBox^ exp_cel;
 public:
+	//
+	// Member Functions
+	//
 	Cell(int i, int j, int cell_size) {
 		//
 		// Button Customization
@@ -34,10 +40,10 @@ public:
 		exp_cel->Name = L"-" + i.ToString() + L"-" + j.ToString() + L"P";
 		exp_cel->Size = System::Drawing::Size(cell_size, cell_size);
 		exp_cel->TabStop = false;
-		exp_cel->SizeMode = PictureBoxSizeMode::StretchImage;
+		exp_cel->SizeMode = System::Windows::Forms::PictureBoxSizeMode::StretchImage;
 	}
 
-	bool is_mined() { return false; }
+	virtual bool is_mined() { return false; }
 
 	void flag() {
 		if (is_exposed == false) {
@@ -50,6 +56,18 @@ public:
 				is_flagged = false;
 			}
 		}
+	}
+
+	virtual int expose() abstract;	
+};
+
+ref class Mined_Cell : public Cell {
+public:
+	//
+	// Member Functions
+	//
+	Mined_Cell(int i, int j, int cell_size) : Cell(i, j, cell_size) {
+		exp_cel->Image = System::Drawing::Image::FromFile("mine.jpeg");
 	}
 };
 

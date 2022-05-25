@@ -116,7 +116,7 @@ namespace OOPProject {
 				exp_cels[i, j]->Size = System::Drawing::Size(cell_size, cell_size);
 				exp_cels[i, j]->TabStop = false;
 				exp_cels[i, j]->SizeMode = PictureBoxSizeMode::StretchImage;
-				exp_cels[i, j]->Image = Image::FromFile("empty_cell.png");
+				exp_cels[i, j]->Image = Image::FromFile("mine_red.jpeg");
 			}
 
 		for (int i = 0; i < rows; i++)
