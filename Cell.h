@@ -6,13 +6,13 @@ protected:
 	System::Windows::Forms::Button^ btn;
 	System::Windows::Forms::PictureBox^ exp_cel;
 public:
-	Cell(int i, int j, int loc_x, int loc_y, int cell_size) {
+	Cell(int i, int j, int cell_size) {
 		//
 		// Button Customization
 		//
 		btn = gcnew System::Windows::Forms::Button();
 		btn->CausesValidation = false;
-		btn->Location = System::Drawing::Point(loc_x, loc_y);
+		btn->Location = System::Drawing::Point((j + 1) * cell_size, (i + 2) * cell_size);
 		btn->Name = L"-" + i.ToString() + L"-" + j.ToString();
 		btn->Size = System::Drawing::Size(cell_size, cell_size);
 		btn->TabStop = false;
@@ -30,7 +30,7 @@ public:
 		// Exposed Cells
 		//
 		exp_cel = gcnew System::Windows::Forms::PictureBox;
-		exp_cel->Location = System::Drawing::Point(loc_x, loc_y);
+		exp_cel->Location = System::Drawing::Point((j + 1) * cell_size, (i + 2) * cell_size);
 		exp_cel->Name = L"-" + i.ToString() + L"-" + j.ToString() + L"P";
 		exp_cel->Size = System::Drawing::Size(cell_size, cell_size);
 		exp_cel->TabStop = false;
