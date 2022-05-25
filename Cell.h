@@ -8,6 +8,7 @@ public:
 	bool is_flagged, is_exposed;
 	System::Windows::Forms::Button^ btn;
 	System::Windows::Forms::PictureBox^ exp_cel;
+	int adj_mines;
 public:
 	//
 	// Member Functions
@@ -44,6 +45,7 @@ public:
 
 		is_flagged = false;
 		is_exposed = false;
+		adj_mines = 0;
 	}
 
 	virtual bool is_mined() { return false; }
@@ -91,15 +93,9 @@ public:
 ref class Unmined_Cell : public Cell {
 public:
 	//
-	//Data Member
-	//
-	int adj_mines;
-public:
-	//
 	// Member Functions
 	//
 	Unmined_Cell(int i, int j, int cell_size) : Cell(i, j, cell_size) {
-		adj_mines = 0;
 		exp_cel->Image = System::Drawing::Image::FromFile("empty_cell.png");
 	}
 

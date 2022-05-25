@@ -30,6 +30,9 @@ namespace OOPProject {
 			cols = 10;
 			cell_size = 52;
 			no_of_mines = 10;
+			total_unmined_cells = rows * cols - no_of_mines;
+			cells_exposed = 0;
+			is_game_over = false;
 		}
 
 	protected:
@@ -44,9 +47,10 @@ namespace OOPProject {
 			}
 		}
 	public: System::Windows::Forms::Label^ label1;
-	private: int rows, cols, cell_size, no_of_mines;
+	private: int rows, cols, cell_size, no_of_mines, total_unmined_cells, cells_exposed;
 	private: cli::array<Cell^, 2>^ cells;
 	private: cli::array<int, 2>^ mine_locs;
+	private: bool is_game_over;
 
 
 		   /// <summary>
@@ -80,6 +84,7 @@ namespace OOPProject {
 			this->ClientSize = System::Drawing::Size(928, 749);
 			this->Controls->Add(this->label1);
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::Fixed3D;
+			this->MaximizeBox = false;
 			this->Name = L"MyForm";
 			this->Text = L"MyForm";
 			this->Load += gcnew System::EventHandler(this, &MyForm::MyForm_Load);
@@ -108,8 +113,10 @@ namespace OOPProject {
 		if (is_Valid(x, y) == true)
 			if (cells[x, y]->is_exposed == false)
 				if (cells[x, y]->is_flagged == false)
-					if(cells[x, y]->is_mined() == false)
+					if (cells[x, y]->is_mined() == false) {
+						cells_exposed++;
 						return true;
+					}
 		return false;
 	}
 
@@ -181,65 +188,104 @@ namespace OOPProject {
 			   outStr = (const char*)ansiStr.ToPointer();
 			   System::Runtime::InteropServices::Marshal::FreeHGlobal(ansiStr);
 	}
+	
+	private: void expose_adj(int i, int j) {
+		if (is_exposable(i - 1, j - 1) == true) if (cells[i - 1, j - 1]->expose() == 2) expose_adj(i - 1, j - 1);
+			if (is_exposable(i, j - 1) == true) if (cells[i, j - 1]->expose() == 2) expose_adj(i, j - 1);
+			if (is_exposable(i + 1, j - 1) == true) if (cells[i + 1, j - 1]->expose() == 2) expose_adj(i + 1, j - 1);
+
+			if (is_exposable(i - 1, j) == true) if (cells[i - 1, j]->expose() == 2) expose_adj(i - 1, j);
+			if (is_exposable(i, j) == true) if (cells[i, j]->expose() == 2) expose_adj(i, j);
+			if (is_exposable(i + 1, j) == true) if (cells[i + 1, j]->expose() == 2) expose_adj(i + 1, j);
+
+			if (is_exposable(i - 1, j + 1) == true) if (cells[i - 1, j + 1]->expose() == 2) expose_adj(i - 1, j + 1);
+			if (is_exposable(i, j + 1) == true) if (cells[i, j + 1]->expose() == 2) expose_adj(i, j + 1);
+			if (is_exposable(i + 1, j + 1) == true) if (cells[i + 1, j + 1]->expose() == 2) expose_adj(i + 1, j + 1);
+		
+	}
+	
+	private: void game_over(int x, int y) {
+		is_game_over = true;
+		label1->Text = L"Game Over!";
+		cells[x, y]->exp_cel->Image = Image::FromFile("mine_red.jpeg");
+		for (int i = 0; i < no_of_mines; i++) {
+			cells[mine_locs[i, 0], mine_locs[i, 1]]->btn->Visible = false;
+			cells[mine_locs[i, 0], mine_locs[i, 1]]->is_exposed = true;
+		}
+	}
 
 	public: System::Void OOPProject::MyForm::OnMouseUp(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e)
 	{
-		std::string text;
-		ClrStringToStdString(text, sender->ToString());
-		int first_dash = text.find('-', 0);
-		int second_dash = text.find('-', first_dash+1);
-		std::string text_x = text.substr(first_dash + 1, second_dash - first_dash - 1);
-		std::string text_y = text.substr(second_dash + 1, text.length() - second_dash - 1);
-		int x = std::stoi(text_x);
-		int y = std::stoi(text_y);
-		label1->Text = x.ToString() + "-" + y.ToString();
-		
-		switch (e->Button) {
-		case (System::Windows::Forms::MouseButtons::Left):
-			cells[x, y]->expose();
-			break;
-		case (System::Windows::Forms::MouseButtons::Right):
-			cells[x, y]->flag();
-			break;
+		if (is_game_over == false) {
+			std::string text;
+			ClrStringToStdString(text, sender->ToString());
+			int first_dash = text.find('-', 0);
+			int second_dash = text.find('-', first_dash + 1);
+			std::string text_x = text.substr(first_dash + 1, second_dash - first_dash - 1);
+			std::string text_y = text.substr(second_dash + 1, text.length() - second_dash - 1);
+			int x = std::stoi(text_x);
+			int y = std::stoi(text_y);
+			label1->Text = x.ToString() + "-" + y.ToString();
+
+			if (e->Button == System::Windows::Forms::MouseButtons::Left) {
+				int what_to_do = cells[x, y]->expose();
+				switch (what_to_do) {
+				case 1: game_over(x, y); break;
+				case 2: expose_adj(x, y); cells_exposed++; break;
+				case 3: cells[x, y]->expose(); cells_exposed++; break;
+				default: break;
+
+				}
+				if (cells_exposed == total_unmined_cells) {
+					is_game_over = true;
+					label1->Text = L"You Won!";
+				}
+			}
+			else if (e->Button == System::Windows::Forms::MouseButtons::Right)
+				cells[x, y]->flag();
 		}
 	}
 
 	void OOPProject::MyForm::OnMouseEnter(System::Object^ sender, System::EventArgs^ e)
 	{
-		std::string text;
-		ClrStringToStdString(text, sender->ToString());
-		int first_dash = text.find('-', 0);
-		int second_dash = text.find('-', first_dash + 1);
-		std::string text_x = text.substr(first_dash + 1, second_dash - first_dash - 1);
-		std::string text_y = text.substr(second_dash + 1, text.length() - second_dash - 1);
-		int x = std::stoi(text_x);
-		int y = std::stoi(text_y);
-		label1->Text = x.ToString() + "-" + y.ToString();
+		if (is_game_over == false) {
+			std::string text;
+			ClrStringToStdString(text, sender->ToString());
+			int first_dash = text.find('-', 0);
+			int second_dash = text.find('-', first_dash + 1);
+			std::string text_x = text.substr(first_dash + 1, second_dash - first_dash - 1);
+			std::string text_y = text.substr(second_dash + 1, text.length() - second_dash - 1);
+			int x = std::stoi(text_x);
+			int y = std::stoi(text_y);
+			label1->Text = x.ToString() + "-" + y.ToString();
 
-		float popness = (float)10 / 100 * cell_size;
+			float popness = (float)10 / 100 * cell_size;
 
-		cells[x, y]->btn->Size = System::Drawing::Size(cell_size + popness, cell_size + popness);
-		cells[x, y]->btn->BringToFront();
+			cells[x, y]->btn->Size = System::Drawing::Size(cell_size + popness, cell_size + popness);
+			cells[x, y]->btn->BringToFront();
+		}
 	}
 
 	void OOPProject::MyForm::OnMouseLeave(System::Object^ sender, System::EventArgs^ e)
-	{
-		std::string text;
-		ClrStringToStdString(text, sender->ToString());
-		int first_dash = text.find('-', 0);
-		int second_dash = text.find('-', first_dash + 1);
-		std::string text_x = text.substr(first_dash + 1, second_dash - first_dash - 1);
-		std::string text_y = text.substr(second_dash + 1, text.length() - second_dash - 1);
-		int x = std::stoi(text_x);
-		int y = std::stoi(text_y);
-		label1->Text = x.ToString() + "-" + y.ToString();
+	{	
+		if (is_game_over == false) {
+			std::string text;
+			ClrStringToStdString(text, sender->ToString());
+			int first_dash = text.find('-', 0);
+			int second_dash = text.find('-', first_dash + 1);
+			std::string text_x = text.substr(first_dash + 1, second_dash - first_dash - 1);
+			std::string text_y = text.substr(second_dash + 1, text.length() - second_dash - 1);
+			int x = std::stoi(text_x);
+			int y = std::stoi(text_y);
+			label1->Text = x.ToString() + "-" + y.ToString();
 
-		float popness = (float)(10 / 100) * cell_size;
+			float popness = (float)(10 / 100) * cell_size;
 
-		cells[x, y]->btn->Size = System::Drawing::Size(cell_size - popness, cell_size - popness);
+			cells[x, y]->btn->Size = System::Drawing::Size(cell_size - popness, cell_size - popness);
 
-		cells[x, y]->btn->SendToBack();
-		cells[x, y]->exp_cel->SendToBack();
+			cells[x, y]->btn->SendToBack();
+			cells[x, y]->exp_cel->SendToBack();
+		}
 	}
 };
 }
