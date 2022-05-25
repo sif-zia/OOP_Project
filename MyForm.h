@@ -1,5 +1,7 @@
 #pragma once
 #include <string>
+#include "Cell.h"
+
 
 namespace OOPProject {
 
@@ -9,7 +11,6 @@ namespace OOPProject {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
-
 	/// <summary>
 	/// Summary for MyForm
 	/// </summary>
@@ -25,8 +26,6 @@ namespace OOPProject {
 			rows = 10;
 			cols = 10;
 			cell_size = 52;
-			initial_x = 50;
-			initial_y = 50;
 		}
 
 	protected:
@@ -72,12 +71,12 @@ namespace OOPProject {
 			// 
 			// MyForm
 			// 
-			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
-			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
+			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::None;
 			this->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(182)), static_cast<System::Int32>(static_cast<System::Byte>(182)),
 				static_cast<System::Int32>(static_cast<System::Byte>(182)));
 			this->ClientSize = System::Drawing::Size(928, 749);
 			this->Controls->Add(this->label1);
+			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::Fixed3D;
 			this->Name = L"MyForm";
 			this->Text = L"MyForm";
 			this->Load += gcnew System::EventHandler(this, &MyForm::MyForm_Load);
@@ -90,6 +89,8 @@ namespace OOPProject {
 		btns = gcnew cli::array<Button^, 2>(rows, cols);
 		exp_cels = gcnew cli::array<PictureBox^, 2>(rows, cols);
 
+		this->ClientSize = System::Drawing::Size((cols + 2) * cell_size, (rows + 3) * cell_size);
+
 		Img = gcnew ImageList;
 		Img->ImageSize = System::Drawing::Size(cell_size-1, cell_size-1);
 		Img->Images->Add(Image::FromFile("Cell.png"));
@@ -100,7 +101,7 @@ namespace OOPProject {
 			for (int j = 0; j < cols; j++) {
 				btns[i, j] = gcnew Button();
 				btns[i, j]->CausesValidation = false;
-				btns[i, j]->Location = System::Drawing::Point(initial_x + (j * cell_size), initial_y + (i * cell_size));
+				btns[i, j]->Location = System::Drawing::Point((j + 1) * cell_size, (i + 2) * cell_size);
 				btns[i, j]->Name = L"-" + i.ToString() + L"-" + j.ToString();
 				btns[i, j]->Size = System::Drawing::Size(cell_size, cell_size);
 				btns[i, j]->TabStop = false;
@@ -118,7 +119,7 @@ namespace OOPProject {
 				btns[i, j]->MouseUp += gcnew System::Windows::Forms::MouseEventHandler(this, &OOPProject::MyForm::OnMouseUp);
 
 				exp_cels[i, j] = gcnew PictureBox;
-				exp_cels[i, j]->Location = System::Drawing::Point(initial_x + (j * cell_size), initial_y + (i * cell_size));
+				exp_cels[i, j]->Location = System::Drawing::Point((j + 1) * cell_size, (i + 2) * cell_size);
 				exp_cels[i, j]->Name = L"-" + i.ToString() + L"-" + j.ToString() + L"P";
 				exp_cels[i, j]->Size = System::Drawing::Size(cell_size, cell_size);
 				exp_cels[i, j]->TabStop = false;
