@@ -55,5 +55,20 @@
     <Image Include="3.jpeg">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="4.jpeg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="5.jpeg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="6.jpeg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="7.jpeg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="8.jpeg">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

@@ -140,6 +140,11 @@
     <Image Include="1.jpeg" />
     <Image Include="2.jpeg" />
     <Image Include="3.jpeg" />
+    <Image Include="4.jpeg" />
+    <Image Include="5.jpeg" />
+    <Image Include="6.jpeg" />
+    <Image Include="7.jpeg" />
+    <Image Include="8.jpeg" />
     <Image Include="Cell.png" />
     <Image Include="empty_cell.png" />
     <Image Include="flag.png" />
