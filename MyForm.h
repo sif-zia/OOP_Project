@@ -90,7 +90,7 @@ namespace OOPProject {
 
 		this->ClientSize = System::Drawing::Size((cols + 2) * cell_size, (rows + 3) * cell_size);
 
-		float popness = (float)12 / 100 * cell_size;
+		float popness = (float)10 / 100 * cell_size;
 
 		for (int i = 0; i < rows; i++)
 			for (int j = 0; j < cols; j++) {
@@ -111,6 +111,8 @@ namespace OOPProject {
 				btns[i, j]->TextAlign = System::Drawing::ContentAlignment::MiddleRight;
 				btns[i, j]->BackgroundImage = Image::FromFile("Cell.png");
 				btns[i, j]->MouseUp += gcnew System::Windows::Forms::MouseEventHandler(this, &OOPProject::MyForm::OnMouseUp);
+				btns[i, j]->MouseEnter += gcnew System::EventHandler(this, &OOPProject::MyForm::OnMouseEnter);
+				btns[i, j]->MouseLeave += gcnew System::EventHandler(this, &OOPProject::MyForm::OnMouseLeave);
 
 				exp_cels[i, j] = gcnew PictureBox;
 				exp_cels[i, j]->Location = System::Drawing::Point((j + 1) * cell_size, (i + 2) * cell_size);
@@ -156,5 +158,41 @@ namespace OOPProject {
 			break;
 		}
 	}
+
+	void OOPProject::MyForm::OnMouseEnter(System::Object^ sender, System::EventArgs^ e)
+	{
+		std::string text;
+		ClrStringToStdString(text, sender->ToString());
+		int first_dash = text.find('-', 0);
+		int second_dash = text.find('-', first_dash + 1);
+		std::string text_x = text.substr(first_dash + 1, second_dash - first_dash - 1);
+		std::string text_y = text.substr(second_dash + 1, text.length() - second_dash - 1);
+		int x = std::stoi(text_x);
+		int y = std::stoi(text_y);
+		label1->Text = x.ToString() + "-" + y.ToString();
+
+		btns[x, y]->BringToFront();
+	}
+
+	void OOPProject::MyForm::OnMouseLeave(System::Object^ sender, System::EventArgs^ e)
+	{
+		std::string text;
+		ClrStringToStdString(text, sender->ToString());
+		int first_dash = text.find('-', 0);
+		int second_dash = text.find('-', first_dash + 1);
+		std::string text_x = text.substr(first_dash + 1, second_dash - first_dash - 1);
+		std::string text_y = text.substr(second_dash + 1, text.length() - second_dash - 1);
+		int x = std::stoi(text_x);
+		int y = std::stoi(text_y);
+		label1->Text = x.ToString() + "-" + y.ToString();
+
+		btns[x, y]->SendToBack();
+		exp_cels[x, y]->SendToBack();
+	}
 };
 }
+
+
+
+
+
