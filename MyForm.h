@@ -1,5 +1,8 @@
 #pragma once
 #include <string>
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctime>
 #include "Cell.h"
 
 
@@ -26,6 +29,7 @@ namespace OOPProject {
 			rows = 10;
 			cols = 10;
 			cell_size = 52;
+			no_of_mines = 10;
 		}
 
 	protected:
@@ -40,9 +44,9 @@ namespace OOPProject {
 			}
 		}
 	public: System::Windows::Forms::Label^ label1;
-	private: int rows, cols, cell_size;
-	public: cli::array<Button^, 2>^ btns;
-	private: cli::array<PictureBox^, 2>^ exp_cels;
+	private: int rows, cols, cell_size, no_of_mines;
+	private: cli::array<Cell^, 2>^ cells;
+	private: cli::array<int, 2>^ mine_locs;
 
 
 		   /// <summary>
@@ -84,59 +88,100 @@ namespace OOPProject {
 
 		}
 #pragma endregion
+
+
+	private: bool check_mine_loc(int x, int y, int mines_deployed){
+		for (int i = 0; i < mines_deployed; i++)
+			if (mine_locs[i, 0] == x && mine_locs[i, 1] == y)
+				return true;
+		return false;
+	}
+	
+	private: bool is_Valid(int x, int y) {
+		if (x >= 0 && x < cols)
+			if (y >= 0 && y < rows)
+				return true;
+		return false;
+	}
+
+	private: bool is_exposable(int x, int y) {
+		if (is_Valid(x, y) == true)
+			if (cells[x, y]->is_exposed == false)
+				if (cells[x, y]->is_flagged == false)
+					if(cells[x, y]->is_mined() == false)
+						return true;
+		return false;
+	}
+
 	private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e) {
-		btns = gcnew cli::array<Button^, 2>(rows, cols);
-		exp_cels = gcnew cli::array<PictureBox^, 2>(rows, cols);
+		srand(time(0));
+
+		cells = gcnew cli::array<Cell^, 2>(rows, cols);
+		mine_locs = gcnew cli::array<int, 2>(no_of_mines, 2);
+
+		int x, y;
+		//
+		// Adding Mines
+		//
+		for (int i = 0; i < no_of_mines; i++) {
+			do {
+				x = rand() % cols;
+				y = rand() % rows;
+			} while (check_mine_loc(x, y, i - 1) == true);
+			mine_locs[i, 0] = x;
+			mine_locs[i, 1] = y;
+			cells[x, y] = gcnew Mined_Cell(x, y, cell_size);
+		}
 
 		this->ClientSize = System::Drawing::Size((cols + 2) * cell_size, (rows + 3) * cell_size);
 
-		float popness = (float)10 / 100 * cell_size;
+		//
+		// Adding Unmined Cells
+		//
+		for (int j = 0; j < rows; j++)
+			for (int i = 0; i < cols; i++) {
+				if (check_mine_loc(i, j, no_of_mines) == false) {
+					cells[i, j] = gcnew Unmined_Cell(i, j, cell_size);
+				}
 
-		for (int i = 0; i < rows; i++)
-			for (int j = 0; j < cols; j++) {
-				btns[i, j] = gcnew Button();
-				btns[i, j]->CausesValidation = false;
-				btns[i, j]->Location = System::Drawing::Point(((j + 1) * cell_size), ((i + 2) * cell_size));
-				btns[i, j]->Name = L"-" + i.ToString() + L"-" + j.ToString();
-				btns[i, j]->Size = System::Drawing::Size(cell_size, cell_size);
-				btns[i, j]->TabStop = false;
-				btns[i, j]->Text = L"-" + i.ToString() + L"-" + j.ToString();
-				btns[i, j]->UseVisualStyleBackColor = true;
-				btns[i, j]->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
-				btns[i, j]->Cursor = System::Windows::Forms::Cursors::Hand;
-				btns[i, j]->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(184)), static_cast<System::Int32>(static_cast<System::Byte>(184)),
-					static_cast<System::Int32>(static_cast<System::Byte>(184)));
-				btns[i, j]->Font = (gcnew System::Drawing::Font(L"Microsoft Uighur", 7.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-					static_cast<System::Byte>(0)));
-				btns[i, j]->TextAlign = System::Drawing::ContentAlignment::MiddleRight;
-				btns[i, j]->BackgroundImage = Image::FromFile("Cell.png");
-				btns[i, j]->MouseUp += gcnew System::Windows::Forms::MouseEventHandler(this, &OOPProject::MyForm::OnMouseUp);
-				btns[i, j]->MouseEnter += gcnew System::EventHandler(this, &OOPProject::MyForm::OnMouseEnter);
-				btns[i, j]->MouseLeave += gcnew System::EventHandler(this, &OOPProject::MyForm::OnMouseLeave);
+				this->Controls->Add(cells[i, j]->exp_cel);
+				this->Controls->Add(cells[i, j]->btn);
+				cells[i, j]->exp_cel->SendToBack();
 
-				exp_cels[i, j] = gcnew PictureBox;
-				exp_cels[i, j]->Location = System::Drawing::Point((j + 1) * cell_size, (i + 2) * cell_size);
-				exp_cels[i, j]->Name = L"-" + i.ToString() + L"-" + j.ToString() + L"P";
-				exp_cels[i, j]->Size = System::Drawing::Size(cell_size, cell_size);
-				exp_cels[i, j]->TabStop = false;
-				exp_cels[i, j]->SizeMode = PictureBoxSizeMode::StretchImage;
-				exp_cels[i, j]->Image = Image::FromFile("empty_cell.png");
+				cells[i, j]->btn->MouseUp += gcnew System::Windows::Forms::MouseEventHandler(this, &OOPProject::MyForm::OnMouseUp);
+				cells[i, j]->btn->MouseEnter += gcnew System::EventHandler(this, &OOPProject::MyForm::OnMouseEnter);
+				cells[i, j]->btn->MouseLeave += gcnew System::EventHandler(this, &OOPProject::MyForm::OnMouseLeave);
 			}
+		//
+		// Counting Adajecent Mines
+		//
+		for (int j = 0; j < rows; j++)
+			for (int i = 0; i < cols; i++) {
+				int adj_mines = 0;
+				if (cells[i, j]->is_mined() == false) {
+					if (is_Valid(i - 1, j - 1) == true) if (cells[i - 1, j - 1]->is_mined() == true) adj_mines++;
+					if (is_Valid(i, j - 1) == true) if (cells[i, j - 1]->is_mined() == true) adj_mines++;
+					if (is_Valid(i + 1, j - 1) == true) if (cells[i + 1, j - 1]->is_mined() == true) adj_mines++;
 
-		for (int i = 0; i < rows; i++)
-			for (int j = 0; j < cols; j++) {
-				Controls->Add(exp_cels[i, j]);
-				Controls->Add(btns[i, j]);
-				exp_cels[i, j]->SendToBack();
+					if (is_Valid(i - 1, j) == true) if (cells[i - 1, j]->is_mined() == true) adj_mines++;
+					if (is_Valid(i, j) == true) if (cells[i, j]->is_mined() == true) adj_mines++;
+					if (is_Valid(i + 1, j) == true) if (cells[i + 1, j]->is_mined() == true) adj_mines++;
+
+					if (is_Valid(i - 1, j + 1) == true) if (cells[i - 1, j + 1]->is_mined() == true) adj_mines++;
+					if (is_Valid(i, j + 1) == true) if (cells[i, j + 1]->is_mined() == true) adj_mines++;
+					if (is_Valid(i + 1, j + 1) == true) if (cells[i + 1, j + 1]->is_mined() == true) adj_mines++;
+
+					cells[i, j]->Set_adj_mines(adj_mines);
+				}
 			}
 	}
-
 
 	public: void ClrStringToStdString(std::string& outStr, String^ str) {
 			   IntPtr ansiStr = System::Runtime::InteropServices::Marshal::StringToHGlobalAnsi(str);
 			   outStr = (const char*)ansiStr.ToPointer();
 			   System::Runtime::InteropServices::Marshal::FreeHGlobal(ansiStr);
 	}
+
 	public: System::Void OOPProject::MyForm::OnMouseUp(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e)
 	{
 		std::string text;
@@ -151,10 +196,10 @@ namespace OOPProject {
 		
 		switch (e->Button) {
 		case (System::Windows::Forms::MouseButtons::Left):
-			btns[x, y]->Visible = false;
+			cells[x, y]->expose();
 			break;
 		case (System::Windows::Forms::MouseButtons::Right):
-			btns[x, y]->BackgroundImage = Image::FromFile("flag.png");
+			cells[x, y]->flag();
 			break;
 		}
 	}
@@ -173,8 +218,8 @@ namespace OOPProject {
 
 		float popness = (float)10 / 100 * cell_size;
 
-		btns[x, y]->Size = System::Drawing::Size(cell_size+popness, cell_size+popness);
-		btns[x, y]->BringToFront();
+		cells[x, y]->btn->Size = System::Drawing::Size(cell_size + popness, cell_size + popness);
+		cells[x, y]->btn->BringToFront();
 	}
 
 	void OOPProject::MyForm::OnMouseLeave(System::Object^ sender, System::EventArgs^ e)
@@ -191,10 +236,10 @@ namespace OOPProject {
 
 		float popness = (float)(10 / 100) * cell_size;
 
-		btns[x, y]->Size = System::Drawing::Size(cell_size - popness, cell_size - popness);
+		cells[x, y]->btn->Size = System::Drawing::Size(cell_size - popness, cell_size - popness);
 
-		btns[x, y]->SendToBack();
-		exp_cels[x, y]->SendToBack();
+		cells[x, y]->btn->SendToBack();
+		cells[x, y]->exp_cel->SendToBack();
 	}
 };
 }
