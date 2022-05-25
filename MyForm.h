@@ -90,13 +90,15 @@ namespace OOPProject {
 
 		this->ClientSize = System::Drawing::Size((cols + 2) * cell_size, (rows + 3) * cell_size);
 
+		float popness = (float)12 / 100 * cell_size;
+
 		for (int i = 0; i < rows; i++)
 			for (int j = 0; j < cols; j++) {
 				btns[i, j] = gcnew Button();
 				btns[i, j]->CausesValidation = false;
-				btns[i, j]->Location = System::Drawing::Point((j + 1) * cell_size, (i + 2) * cell_size);
+				btns[i, j]->Location = System::Drawing::Point(((j + 1) * cell_size) - popness, ((i + 2) * cell_size) - popness);
 				btns[i, j]->Name = L"-" + i.ToString() + L"-" + j.ToString();
-				btns[i, j]->Size = System::Drawing::Size(cell_size, cell_size);
+				btns[i, j]->Size = System::Drawing::Size(cell_size + popness, cell_size + popness);
 				btns[i, j]->TabStop = false;
 				btns[i, j]->Text = L"-" + i.ToString() + L"-" + j.ToString();
 				btns[i, j]->UseVisualStyleBackColor = true;
@@ -116,7 +118,7 @@ namespace OOPProject {
 				exp_cels[i, j]->Size = System::Drawing::Size(cell_size, cell_size);
 				exp_cels[i, j]->TabStop = false;
 				exp_cels[i, j]->SizeMode = PictureBoxSizeMode::StretchImage;
-				exp_cels[i, j]->Image = Image::FromFile("mine_red.jpeg");
+				exp_cels[i, j]->Image = Image::FromFile("empty_cell.png");
 			}
 
 		for (int i = 0; i < rows; i++)

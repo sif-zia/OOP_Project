@@ -69,5 +69,53 @@ public:
 	Mined_Cell(int i, int j, int cell_size) : Cell(i, j, cell_size) {
 		exp_cel->Image = System::Drawing::Image::FromFile("mine.jpeg");
 	}
+
+	virtual bool is_mined() override { return true; }
+
+	virtual int expose() override {
+		if (is_flagged == false && is_exposed == false) {
+			exp_cel->Image = System::Drawing::Image::FromFile("mine_red.jpeg");
+			btn->Visible = false;
+			return 1; // Game Over
+		}
+		return 0; // Do Nothing
+	}
 };
 
+ref class Unmined_Cell : public Cell {
+public:
+	//
+	//Data Member
+	//
+	int adj_mines;
+public:
+	//
+	// Member Functions
+	//
+	Unmined_Cell(int i, int j, int cell_size) : Cell(i, j, cell_size) {
+		adj_mines = 0;
+		exp_cel->Image = System::Drawing::Image::FromFile("Cell.png");
+	}
+
+	void Set_adj_mines(int mines) {
+		adj_mines = mines;
+		System::String^ filename = gcnew System::String(mines.ToString() + L".jepg");
+		exp_cel->Image = System::Drawing::Image::FromFile(filename);
+	}
+
+	virtual bool is_mined() override { return false; }
+
+	virtual int expose() override {
+		if (is_flagged == false && is_exposed == false) {
+			if (adj_mines == 0) {
+				btn->Visible = false;
+				return 2; // Expose Adjacents
+			}
+			else {
+				btn->Visible = false;
+				return 3; // Expose Current
+			}
+		}
+		return 0; // Do Nothing
+	}
+};
