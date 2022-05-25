@@ -34,7 +34,7 @@ public:
 		exp_cel->Name = L"-" + i.ToString() + L"-" + j.ToString() + L"P";
 		exp_cel->Size = System::Drawing::Size(cell_size, cell_size);
 		exp_cel->TabStop = false;
-		exp_cel->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
+		exp_cel->SizeMode = PictureBoxSizeMode::StretchImage;
 	}
 
 	bool is_mined() { return false; }

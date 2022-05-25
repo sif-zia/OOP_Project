@@ -40,10 +40,9 @@ namespace OOPProject {
 			}
 		}
 	public: System::Windows::Forms::Label^ label1;
-	private: int rows, cols, cell_size, initial_x, initial_y;
+	private: int rows, cols, cell_size;
 	public: cli::array<Button^, 2>^ btns;
 	private: cli::array<PictureBox^, 2>^ exp_cels;
-	private: ImageList^ Img;
 
 
 		   /// <summary>
@@ -91,12 +90,6 @@ namespace OOPProject {
 
 		this->ClientSize = System::Drawing::Size((cols + 2) * cell_size, (rows + 3) * cell_size);
 
-		Img = gcnew ImageList;
-		Img->ImageSize = System::Drawing::Size(cell_size-1, cell_size-1);
-		Img->Images->Add(Image::FromFile("Cell.png"));
-		Img->Images->Add(Image::FromFile("flag.png"));
-		Img->Images->Add(Image::FromFile("empty_cell.png"));
-
 		for (int i = 0; i < rows; i++)
 			for (int j = 0; j < cols; j++) {
 				btns[i, j] = gcnew Button();
@@ -105,7 +98,6 @@ namespace OOPProject {
 				btns[i, j]->Name = L"-" + i.ToString() + L"-" + j.ToString();
 				btns[i, j]->Size = System::Drawing::Size(cell_size, cell_size);
 				btns[i, j]->TabStop = false;
-				btns[i, j]->TabIndex = (i * cols) + j;
 				btns[i, j]->Text = L"-" + i.ToString() + L"-" + j.ToString();
 				btns[i, j]->UseVisualStyleBackColor = true;
 				btns[i, j]->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
@@ -115,7 +107,7 @@ namespace OOPProject {
 				btns[i, j]->Font = (gcnew System::Drawing::Font(L"Microsoft Uighur", 7.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 					static_cast<System::Byte>(0)));
 				btns[i, j]->TextAlign = System::Drawing::ContentAlignment::MiddleRight;
-				btns[i, j]->BackgroundImage = Img->Images[0];
+				btns[i, j]->BackgroundImage = Image::FromFile("Cell.png");
 				btns[i, j]->MouseUp += gcnew System::Windows::Forms::MouseEventHandler(this, &OOPProject::MyForm::OnMouseUp);
 
 				exp_cels[i, j] = gcnew PictureBox;
@@ -123,8 +115,8 @@ namespace OOPProject {
 				exp_cels[i, j]->Name = L"-" + i.ToString() + L"-" + j.ToString() + L"P";
 				exp_cels[i, j]->Size = System::Drawing::Size(cell_size, cell_size);
 				exp_cels[i, j]->TabStop = false;
-				exp_cels[i, j]->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
-				exp_cels[i, j]->Image = Img->Images[2];
+				exp_cels[i, j]->SizeMode = PictureBoxSizeMode::StretchImage;
+				exp_cels[i, j]->Image = Image::FromFile("empty_cell.png");
 			}
 
 		for (int i = 0; i < rows; i++)
@@ -158,7 +150,7 @@ namespace OOPProject {
 			btns[x, y]->Visible = false;
 			break;
 		case (System::Windows::Forms::MouseButtons::Right):
-			btns[x, y]->BackgroundImage = Img->Images[1];
+			btns[x, y]->BackgroundImage = Image::FromFile("flag.png");
 			break;
 		}
 	}
