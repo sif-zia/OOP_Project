@@ -46,5 +46,11 @@
     <Image Include="mine_red.jpeg">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="1.jpeg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="2.jpeg">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

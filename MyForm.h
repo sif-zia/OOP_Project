@@ -96,9 +96,9 @@ namespace OOPProject {
 			for (int j = 0; j < cols; j++) {
 				btns[i, j] = gcnew Button();
 				btns[i, j]->CausesValidation = false;
-				btns[i, j]->Location = System::Drawing::Point(((j + 1) * cell_size) - popness, ((i + 2) * cell_size) - popness);
+				btns[i, j]->Location = System::Drawing::Point(((j + 1) * cell_size), ((i + 2) * cell_size));
 				btns[i, j]->Name = L"-" + i.ToString() + L"-" + j.ToString();
-				btns[i, j]->Size = System::Drawing::Size(cell_size + popness, cell_size + popness);
+				btns[i, j]->Size = System::Drawing::Size(cell_size, cell_size);
 				btns[i, j]->TabStop = false;
 				btns[i, j]->Text = L"-" + i.ToString() + L"-" + j.ToString();
 				btns[i, j]->UseVisualStyleBackColor = true;
@@ -171,6 +171,9 @@ namespace OOPProject {
 		int y = std::stoi(text_y);
 		label1->Text = x.ToString() + "-" + y.ToString();
 
+		float popness = (float)10 / 100 * cell_size;
+
+		btns[x, y]->Size = System::Drawing::Size(cell_size+popness, cell_size+popness);
 		btns[x, y]->BringToFront();
 	}
 
@@ -185,6 +188,10 @@ namespace OOPProject {
 		int x = std::stoi(text_x);
 		int y = std::stoi(text_y);
 		label1->Text = x.ToString() + "-" + y.ToString();
+
+		float popness = (float)(10 / 100) * cell_size;
+
+		btns[x, y]->Size = System::Drawing::Size(cell_size - popness, cell_size - popness);
 
 		btns[x, y]->SendToBack();
 		exp_cels[x, y]->SendToBack();
