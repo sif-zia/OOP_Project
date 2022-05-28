@@ -146,10 +146,18 @@
     <Image Include="7.jpeg" />
     <Image Include="8.jpeg" />
     <Image Include="Cell.png" />
+    <Image Include="dead.png" />
     <Image Include="empty_cell.png" />
     <Image Include="flag.png" />
+    <Image Include="Happy.png" />
     <Image Include="mine.jpeg" />
     <Image Include="mine_red.jpeg" />
+    <Image Include="scared.png" />
+    <Image Include="win.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".gitattributes" />
+    <None Include=".gitignore" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

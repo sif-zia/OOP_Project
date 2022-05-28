@@ -50,15 +50,17 @@ public:
 
 	virtual bool is_mined() { return false; }
 
-	void flag() {
+	bool flag() {
 		if (is_exposed == false) {
 			if (is_flagged == false) {
 				btn->BackgroundImage = System::Drawing::Image::FromFile("flag.png");
 				is_flagged = true;
+				return true;
 			}
 			else if (is_flagged == true) {
 				btn->BackgroundImage = System::Drawing::Image::FromFile("Cell.png");
 				is_flagged = false;
+				return false;
 			}
 		}
 	}

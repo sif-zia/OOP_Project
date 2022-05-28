@@ -70,5 +70,25 @@
     <Image Include="8.jpeg">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Happy.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="dead.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="scared.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="win.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".gitattributes">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include=".gitignore">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
