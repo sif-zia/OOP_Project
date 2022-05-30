@@ -140,6 +140,9 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="leaderboard.resx">
+      <DependentUpon>leaderboard.h</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="menu.resx">
       <DependentUpon>menu.h</DependentUpon>
     </EmbeddedResource>
