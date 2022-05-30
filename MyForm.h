@@ -20,7 +20,7 @@ namespace OOPProject {
 	public ref class MyForm : public System::Windows::Forms::Form
 	{
 	public:
-		MyForm(void)
+		MyForm(int mode)
 		{
 			InitializeComponent();
 			//
@@ -28,7 +28,12 @@ namespace OOPProject {
 			//
 			cells = nullptr;
 			mine_locs = nullptr;
-			initializeGame(10, 10, 42, 10);
+			if (mode == 0)
+				initializeGame(9, 9, 52, 10);
+			else if (mode == 1)
+				initializeGame(16, 16, 40, 40);
+			else if (mode == 2)
+				initializeGame(30, 16, 30, 99);
 		}
 
 	protected:
@@ -85,11 +90,11 @@ namespace OOPProject {
 			this->flag_count_lbl->Font = (gcnew System::Drawing::Font(L"hooge 05_53", 24, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->flag_count_lbl->ForeColor = System::Drawing::Color::IndianRed;
-			this->flag_count_lbl->Location = System::Drawing::Point(113, 9);
+			this->flag_count_lbl->Location = System::Drawing::Point(84, 12);
 			this->flag_count_lbl->Name = L"flag_count_lbl";
-			this->flag_count_lbl->Size = System::Drawing::Size(82, 50);
+			this->flag_count_lbl->Size = System::Drawing::Size(112, 50);
 			this->flag_count_lbl->TabIndex = 1;
-			this->flag_count_lbl->Text = L"00";
+			this->flag_count_lbl->Text = L"000";
 			// 
 			// timer_lbl
 			// 
@@ -98,7 +103,7 @@ namespace OOPProject {
 			this->timer_lbl->Font = (gcnew System::Drawing::Font(L"hooge 05_53", 24, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->timer_lbl->ForeColor = System::Drawing::Color::IndianRed;
-			this->timer_lbl->Location = System::Drawing::Point(311, 9);
+			this->timer_lbl->Location = System::Drawing::Point(387, 12);
 			this->timer_lbl->Name = L"timer_lbl";
 			this->timer_lbl->Size = System::Drawing::Size(112, 50);
 			this->timer_lbl->TabIndex = 2;
@@ -113,7 +118,7 @@ namespace OOPProject {
 			// 
 			this->React->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"React.BackgroundImage")));
 			this->React->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
-			this->React->Location = System::Drawing::Point(212, 9);
+			this->React->Location = System::Drawing::Point(270, 12);
 			this->React->Name = L"React";
 			this->React->Size = System::Drawing::Size(50, 50);
 			this->React->TabIndex = 0;
@@ -159,10 +164,14 @@ namespace OOPProject {
 
 	private: void initializeGame(int cols, int rows, int Cell_size, int Mines) {
 		
-		if (cells != nullptr)
+		if (cells != nullptr) {
 			for (int i = 0; i < Rows; i++)
-				for (int j = 0; j < Cols; j++)
-					cells[i, j]->btn->Visible = false, cells[i, j]->exp_cel->Visible = false;
+				for (int j = 0; j < Cols; j++) {
+					this->Controls->Remove(cells[i, j]->btn);
+					this->Controls->Remove(cells[i, j]->exp_cel);
+					delete cells[i, j];
+				}
+		}
 		if (mine_locs != nullptr)
 			for (int i = 0; i < no_of_mines; i++)
 				mine_locs[i, 0] = -1, mine_locs[i, 1] = -1;
@@ -180,12 +189,13 @@ namespace OOPProject {
 		srand(time(0));
 
 		back_lbl->SendToBack();
-		flag_count_lbl->Text = flag_count.ToString(L"D2");
+		flag_count_lbl->Text = flag_count.ToString(L"D3");
 		timer_lbl->Text = seconds_count.ToString(L"D3");
 		React->BackgroundImage = Image::FromFile("happy.png");
 
 		cells = gcnew cli::array<Cell^, 2>(Rows, Cols);
-		mine_locs = gcnew cli::array<int, 2>(no_of_mines, 2);
+		if(mine_locs == nullptr)
+			mine_locs = gcnew cli::array<int, 2>(no_of_mines, 2);
 
 		int x, y;
 		//
@@ -209,7 +219,7 @@ namespace OOPProject {
 		this->back_lbl->Location = System::Drawing::Point(cell_size, cell_size / 4);
 		this->back_lbl->Size = System::Drawing::Size(Cols * cell_size, cell_size + cell_size/2);
 		this->flag_count_lbl->Location = System::Drawing::Point(cell_size + cell_size / 2, cell_size / 2);
-		this->timer_lbl->Location = System::Drawing::Point((Cols - 2) * cell_size + cell_size/2, cell_size / 2);
+		this->timer_lbl->Location = System::Drawing::Point((Cols - 2) * cell_size + cell_size/2 - ((Cols / 16) * cell_size / 2), cell_size / 2);
 		this->React->Location = System::Drawing::Point(float(Cols)/2.0 * cell_size + cell_size / 4, cell_size / 2 - cell_size / 8);
 		this->React->Size = System::Drawing::Size(cell_size + cell_size / 4, cell_size + cell_size / 4);
 
@@ -353,7 +363,7 @@ namespace OOPProject {
 				else
 					flag_count++;
 				if(flag_count >= 0)
-					flag_count_lbl->Text = flag_count.ToString(L"D2");
+					flag_count_lbl->Text = flag_count.ToString(L"D3");
 				else
 					flag_count_lbl->Text = flag_count.ToString();
 			}

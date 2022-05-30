@@ -8,7 +8,7 @@ using namespace System::Windows::Forms;
 void main(array<String^>^ args) {
 	Application::EnableVisualStyles();
 	Application::SetCompatibleTextRenderingDefault(false);
-	OOPProject::MyForm form;
+	OOPProject::MyForm form(2);
 
 
 	Application::Run(% form);
