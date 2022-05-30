@@ -162,7 +162,7 @@ namespace OOPProject {
 #pragma endregion
 
 
-	private: void initializeGame(int cols, int rows, int Cell_size, int Mines) {
+	public: void initializeGame(int cols, int rows, int Cell_size, int Mines) {
 		
 		if (cells != nullptr) {
 			for (int i = 0; i < Rows; i++)
