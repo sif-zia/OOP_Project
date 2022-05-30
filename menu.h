@@ -149,19 +149,19 @@ namespace OOPProject {
 		delete form;
 		this->Show();
 	}
-private: System::Void medm_btn_Click(System::Object^ sender, System::EventArgs^ e) {
-	this->Hide();
-	MyForm^ form = gcnew MyForm(1);
-	form->ShowDialog();
-	delete form;
-	this->Show();
-}
-private: System::Void hard_btn_Click(System::Object^ sender, System::EventArgs^ e) {
-	this->Hide();
-	MyForm^ form = gcnew MyForm(2);
-	form->ShowDialog();
-	delete form;
-	this->Show();
-}
+	private: System::Void medm_btn_Click(System::Object^ sender, System::EventArgs^ e) {
+		this->Hide();
+		MyForm^ form = gcnew MyForm(1);
+		form->ShowDialog();
+		delete form;
+		this->Show();
+	}
+	private: System::Void hard_btn_Click(System::Object^ sender, System::EventArgs^ e) {
+		this->Hide();
+		MyForm^ form = gcnew MyForm(2);
+		form->ShowDialog();
+		delete form;
+		this->Show();
+	}
 };
 }
