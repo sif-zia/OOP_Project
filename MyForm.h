@@ -51,6 +51,7 @@ namespace OOPProject {
 	private: System::Windows::Forms::Label^ timer_lbl;
 	private: System::Windows::Forms::Timer^ timer;
 	private: System::Windows::Forms::Button^ React;
+	private: System::Windows::Forms::PictureBox^ back_lbl;
 
 	private: System::ComponentModel::IContainer^ components;
 
@@ -73,6 +74,8 @@ namespace OOPProject {
 			this->timer_lbl = (gcnew System::Windows::Forms::Label());
 			this->timer = (gcnew System::Windows::Forms::Timer(this->components));
 			this->React = (gcnew System::Windows::Forms::Button());
+			this->back_lbl = (gcnew System::Windows::Forms::PictureBox());
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->back_lbl))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// flag_count_lbl
@@ -82,11 +85,11 @@ namespace OOPProject {
 			this->flag_count_lbl->Font = (gcnew System::Drawing::Font(L"hooge 05_53", 24, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->flag_count_lbl->ForeColor = System::Drawing::Color::IndianRed;
-			this->flag_count_lbl->Location = System::Drawing::Point(65, 12);
+			this->flag_count_lbl->Location = System::Drawing::Point(113, 9);
 			this->flag_count_lbl->Name = L"flag_count_lbl";
-			this->flag_count_lbl->Size = System::Drawing::Size(192, 50);
+			this->flag_count_lbl->Size = System::Drawing::Size(82, 50);
 			this->flag_count_lbl->TabIndex = 1;
-			this->flag_count_lbl->Text = L"label2";
+			this->flag_count_lbl->Text = L"00";
 			// 
 			// timer_lbl
 			// 
@@ -95,11 +98,11 @@ namespace OOPProject {
 			this->timer_lbl->Font = (gcnew System::Drawing::Font(L"hooge 05_53", 24, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->timer_lbl->ForeColor = System::Drawing::Color::IndianRed;
-			this->timer_lbl->Location = System::Drawing::Point(356, 12);
+			this->timer_lbl->Location = System::Drawing::Point(311, 9);
 			this->timer_lbl->Name = L"timer_lbl";
-			this->timer_lbl->Size = System::Drawing::Size(192, 50);
+			this->timer_lbl->Size = System::Drawing::Size(112, 50);
 			this->timer_lbl->TabIndex = 2;
-			this->timer_lbl->Text = L"label2";
+			this->timer_lbl->Text = L"000";
 			// 
 			// timer
 			// 
@@ -110,13 +113,24 @@ namespace OOPProject {
 			// 
 			this->React->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"React.BackgroundImage")));
 			this->React->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
-			this->React->Location = System::Drawing::Point(263, 12);
+			this->React->Location = System::Drawing::Point(212, 9);
 			this->React->Name = L"React";
 			this->React->Size = System::Drawing::Size(50, 50);
-			this->React->TabIndex = 3;
+			this->React->TabIndex = 0;
+			this->React->TabStop = false;
 			this->React->UseVisualStyleBackColor = true;
 			this->React->Click += gcnew System::EventHandler(this, &MyForm::React_Click);
 			this->React->MouseUp += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::React_MouseUp);
+			// 
+			// back_lbl
+			// 
+			this->back_lbl->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"back_lbl.Image")));
+			this->back_lbl->Location = System::Drawing::Point(83, 65);
+			this->back_lbl->Name = L"back_lbl";
+			this->back_lbl->Size = System::Drawing::Size(416, 64);
+			this->back_lbl->SizeMode = System::Windows::Forms::PictureBoxSizeMode::StretchImage;
+			this->back_lbl->TabIndex = 3;
+			this->back_lbl->TabStop = false;
 			// 
 			// MyForm
 			// 
@@ -125,6 +139,7 @@ namespace OOPProject {
 				static_cast<System::Int32>(static_cast<System::Byte>(182)));
 			this->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
 			this->ClientSize = System::Drawing::Size(928, 749);
+			this->Controls->Add(this->back_lbl);
 			this->Controls->Add(this->React);
 			this->Controls->Add(this->timer_lbl);
 			this->Controls->Add(this->flag_count_lbl);
@@ -134,6 +149,7 @@ namespace OOPProject {
 			this->Name = L"MyForm";
 			this->Text = L"Minesweeper";
 			this->Load += gcnew System::EventHandler(this, &MyForm::MyForm_Load);
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->back_lbl))->EndInit();
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -163,6 +179,7 @@ namespace OOPProject {
 
 		srand(time(0));
 
+		back_lbl->SendToBack();
 		flag_count_lbl->Text = flag_count.ToString(L"D2");
 		timer_lbl->Text = seconds_count.ToString(L"D3");
 		React->BackgroundImage = Image::FromFile("happy.png");
@@ -185,6 +202,16 @@ namespace OOPProject {
 		}
 
 		this->ClientSize = System::Drawing::Size((Cols + 2) * cell_size, (Rows + 3) * cell_size);
+		this->timer_lbl->Font = (gcnew System::Drawing::Font(L"hooge 05_53", cell_size/2 + cell_size/11, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			static_cast<System::Byte>(0)));
+		this->flag_count_lbl->Font = (gcnew System::Drawing::Font(L"hooge 05_53", cell_size / 2 + cell_size / 11, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			static_cast<System::Byte>(0)));
+		this->back_lbl->Location = System::Drawing::Point(cell_size, cell_size / 4);
+		this->back_lbl->Size = System::Drawing::Size(Cols * cell_size, cell_size + cell_size/2);
+		this->flag_count_lbl->Location = System::Drawing::Point(cell_size + cell_size / 2, cell_size / 2);
+		this->timer_lbl->Location = System::Drawing::Point((Cols - 2) * cell_size + cell_size/2, cell_size / 2);
+		this->React->Location = System::Drawing::Point(float(Cols)/2.0 * cell_size + cell_size / 4, cell_size / 2 - cell_size / 8);
+		this->React->Size = System::Drawing::Size(cell_size + cell_size / 4, cell_size + cell_size / 4);
 
 		//
 		// Adding Unmined Cells
@@ -264,7 +291,7 @@ namespace OOPProject {
 	}
 	
 	private: void expose_adj(int i, int j) {
-		if (is_exposable(i - 1, j - 1) == true) if (cells[i - 1, j - 1]->expose() == 2) expose_adj(i - 1, j - 1);
+			if (is_exposable(i - 1, j - 1) == true) if (cells[i - 1, j - 1]->expose() == 2) expose_adj(i - 1, j - 1);
 			if (is_exposable(i, j - 1) == true) if (cells[i, j - 1]->expose() == 2) expose_adj(i, j - 1);
 			if (is_exposable(i + 1, j - 1) == true) if (cells[i + 1, j - 1]->expose() == 2) expose_adj(i + 1, j - 1);
 

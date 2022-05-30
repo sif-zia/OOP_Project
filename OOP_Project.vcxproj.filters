@@ -82,6 +82,9 @@
     <Image Include="win.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="empty_cell_hori.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes">
