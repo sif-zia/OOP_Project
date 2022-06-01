@@ -27,6 +27,8 @@ namespace OOPProject {
 			//
 			//TODO: Add the constructor code here
 			//
+			soundEffects = gcnew System::Media::SoundPlayer;
+
 			game_mode = mode;
 			cells = nullptr;
 			mine_locs = nullptr;
@@ -59,6 +61,7 @@ namespace OOPProject {
 	private: System::Windows::Forms::Timer^ timer;
 	private: System::Windows::Forms::Button^ React;
 	private: System::Windows::Forms::PictureBox^ back_lbl;
+	private: System::Media::SoundPlayer^ soundEffects;
 
 	private: System::ComponentModel::IContainer^ components;
 
@@ -154,6 +157,7 @@ namespace OOPProject {
 			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			this->MaximizeBox = false;
 			this->Name = L"MyForm";
+			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"Minesweeper";
 			this->Load += gcnew System::EventHandler(this, &MyForm::MyForm_Load);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->back_lbl))->EndInit();
@@ -161,6 +165,7 @@ namespace OOPProject {
 			this->PerformLayout();
 
 		}
+
 #pragma endregion
 
 
@@ -320,6 +325,7 @@ namespace OOPProject {
 	private: void game_over(int x, int y) {
 		is_game_over = true;
 		timer->Enabled = false;
+		
 		cells[x, y]->exp_cel->Image = Image::FromFile("mine_red.jpeg");
 		React->BackgroundImage = Image::FromFile("dead.png");
 		for (int i = 0; i < no_of_mines; i++) {
@@ -328,6 +334,7 @@ namespace OOPProject {
 			if (cells[mine_locs[i, 0], mine_locs[i, 1]]->is_flagged == true)
 				cells[mine_locs[i, 0], mine_locs[i, 1]]->exp_cel->Image = Image::FromFile("mine_crossed.jpeg");
 		}
+		soundEffects->SoundLocation = L"game_over.wav"; soundEffects->Play();
 	}
 
 	public: System::Void OOPProject::MyForm::OnMouseUp(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e)
@@ -349,15 +356,20 @@ namespace OOPProject {
 
 			if (e->Button == System::Windows::Forms::MouseButtons::Left) {
 				int what_to_do = cells[x, y]->expose();
+
+				soundEffects->SoundLocation = L"expose_cell.wav";
+
 				switch (what_to_do) {
 				case 1: game_over(x, y); break;
-				case 2: expose_adj(x, y); cells_exposed++; break;
-				case 3: cells[x, y]->expose(); cells_exposed++; break;
+				case 2: expose_adj(x, y); cells_exposed++; soundEffects->Play(); break;
+				case 3: cells[x, y]->expose(); cells_exposed++; soundEffects->Play(); break;
 				default: break;
 				}
 				if (cells_exposed == total_unmined_cells) {
 					is_game_over = true;
 					React->BackgroundImage = Image::FromFile("win.png");
+					soundEffects->SoundLocation = L"win.wav";
+					soundEffects->Play();
 					timer->Enabled = false;
 					leaderboard l(game_mode, seconds_count);
 					l.ShowDialog();
@@ -430,6 +442,7 @@ namespace OOPProject {
 	
 	private: System::Void React_Click(System::Object^ sender, System::EventArgs^ e) {
 	}
+	
 	private: System::Void React_MouseUp(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
 		if (e->Button == System::Windows::Forms::MouseButtons::Left)
 			if (is_game_over == true)

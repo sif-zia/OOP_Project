@@ -178,6 +178,13 @@
     <None Include="hard.dat" />
     <None Include="medium.dat" />
   </ItemGroup>
+  <ItemGroup>
+    <Media Include="expose_cell.wav" />
+    <Media Include="expose_mine.wav" />
+    <Media Include="game_over.wav" />
+    <Media Include="start.wav" />
+    <Media Include="win.wav" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

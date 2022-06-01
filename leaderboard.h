@@ -66,16 +66,15 @@ namespace OOPProject {
 					curPos = i, should_add = true;
 			}
 
-			if (should_add == true && posNums < 5)
-				posNums++;
-
 
 			if (should_add == false && posNums < 5) {
-				curPos = posNums, posNums++, should_add = true;
+				curPos = posNums, should_add = true;
 			}
 
-			newName->Enabled = true;
-			submit_btn->Enabled = true;
+			if (should_add == true) {
+				newName->Enabled = true;
+				submit_btn->Enabled = true;
+			}
 
 			if (should_add == true)
 				Msg_lbl->Text = L"Congrats! You got " + (curPos+1).ToString() + L" position.";
@@ -234,7 +233,7 @@ namespace OOPProject {
 			this->posName5_lbl->AutoSize = true;
 			this->posName5_lbl->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 16.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->posName5_lbl->Location = System::Drawing::Point(112, 370);
+			this->posName5_lbl->Location = System::Drawing::Point(145, 370);
 			this->posName5_lbl->Name = L"posName5_lbl";
 			this->posName5_lbl->Size = System::Drawing::Size(167, 39);
 			this->posName5_lbl->TabIndex = 10;
@@ -246,7 +245,7 @@ namespace OOPProject {
 			this->posName4_lbl->AutoSize = true;
 			this->posName4_lbl->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 16.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->posName4_lbl->Location = System::Drawing::Point(112, 305);
+			this->posName4_lbl->Location = System::Drawing::Point(145, 305);
 			this->posName4_lbl->Name = L"posName4_lbl";
 			this->posName4_lbl->Size = System::Drawing::Size(167, 39);
 			this->posName4_lbl->TabIndex = 9;
@@ -258,7 +257,7 @@ namespace OOPProject {
 			this->posName3_lbl->AutoSize = true;
 			this->posName3_lbl->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 16.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->posName3_lbl->Location = System::Drawing::Point(112, 245);
+			this->posName3_lbl->Location = System::Drawing::Point(145, 245);
 			this->posName3_lbl->Name = L"posName3_lbl";
 			this->posName3_lbl->Size = System::Drawing::Size(167, 39);
 			this->posName3_lbl->TabIndex = 8;
@@ -270,7 +269,7 @@ namespace OOPProject {
 			this->posName2_lbl->AutoSize = true;
 			this->posName2_lbl->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 16.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->posName2_lbl->Location = System::Drawing::Point(112, 182);
+			this->posName2_lbl->Location = System::Drawing::Point(145, 182);
 			this->posName2_lbl->Name = L"posName2_lbl";
 			this->posName2_lbl->Size = System::Drawing::Size(167, 39);
 			this->posName2_lbl->TabIndex = 7;
@@ -282,7 +281,7 @@ namespace OOPProject {
 			this->posName1_lbl->AutoSize = true;
 			this->posName1_lbl->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 16.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->posName1_lbl->Location = System::Drawing::Point(112, 120);
+			this->posName1_lbl->Location = System::Drawing::Point(145, 120);
 			this->posName1_lbl->Name = L"posName1_lbl";
 			this->posName1_lbl->Size = System::Drawing::Size(163, 39);
 			this->posName1_lbl->TabIndex = 6;
@@ -294,7 +293,7 @@ namespace OOPProject {
 			this->posScore5_lbl->AutoSize = true;
 			this->posScore5_lbl->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 16.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->posScore5_lbl->Location = System::Drawing::Point(378, 370);
+			this->posScore5_lbl->Location = System::Drawing::Point(436, 370);
 			this->posScore5_lbl->Name = L"posScore5_lbl";
 			this->posScore5_lbl->Size = System::Drawing::Size(68, 39);
 			this->posScore5_lbl->TabIndex = 15;
@@ -306,7 +305,7 @@ namespace OOPProject {
 			this->posScore4_lbl->AutoSize = true;
 			this->posScore4_lbl->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 16.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->posScore4_lbl->Location = System::Drawing::Point(378, 305);
+			this->posScore4_lbl->Location = System::Drawing::Point(436, 305);
 			this->posScore4_lbl->Name = L"posScore4_lbl";
 			this->posScore4_lbl->Size = System::Drawing::Size(68, 39);
 			this->posScore4_lbl->TabIndex = 14;
@@ -318,7 +317,7 @@ namespace OOPProject {
 			this->posScore3_lbl->AutoSize = true;
 			this->posScore3_lbl->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 16.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->posScore3_lbl->Location = System::Drawing::Point(378, 245);
+			this->posScore3_lbl->Location = System::Drawing::Point(436, 245);
 			this->posScore3_lbl->Name = L"posScore3_lbl";
 			this->posScore3_lbl->Size = System::Drawing::Size(68, 39);
 			this->posScore3_lbl->TabIndex = 13;
@@ -330,7 +329,7 @@ namespace OOPProject {
 			this->posScore2_lbl->AutoSize = true;
 			this->posScore2_lbl->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 16.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->posScore2_lbl->Location = System::Drawing::Point(378, 182);
+			this->posScore2_lbl->Location = System::Drawing::Point(436, 182);
 			this->posScore2_lbl->Name = L"posScore2_lbl";
 			this->posScore2_lbl->Size = System::Drawing::Size(68, 39);
 			this->posScore2_lbl->TabIndex = 12;
@@ -342,7 +341,7 @@ namespace OOPProject {
 			this->posScore1_lbl->AutoSize = true;
 			this->posScore1_lbl->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 16.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->posScore1_lbl->Location = System::Drawing::Point(378, 120);
+			this->posScore1_lbl->Location = System::Drawing::Point(436, 120);
 			this->posScore1_lbl->Name = L"posScore1_lbl";
 			this->posScore1_lbl->Size = System::Drawing::Size(68, 39);
 			this->posScore1_lbl->TabIndex = 11;
@@ -354,7 +353,7 @@ namespace OOPProject {
 			this->label1->AutoSize = true;
 			this->label1->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 16.2F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->label1->Location = System::Drawing::Point(367, 67);
+			this->label1->Location = System::Drawing::Point(425, 67);
 			this->label1->Name = L"label1";
 			this->label1->Size = System::Drawing::Size(94, 39);
 			this->label1->TabIndex = 18;
@@ -365,7 +364,7 @@ namespace OOPProject {
 			this->PosName->AutoSize = true;
 			this->PosName->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 16.2F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->PosName->Location = System::Drawing::Point(146, 67);
+			this->PosName->Location = System::Drawing::Point(145, 67);
 			this->PosName->Name = L"PosName";
 			this->PosName->Size = System::Drawing::Size(94, 39);
 			this->PosName->TabIndex = 17;
@@ -446,6 +445,7 @@ namespace OOPProject {
 			this->Controls->Add(this->mode_name_lbl);
 			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			this->Name = L"leaderboard";
+			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"Leaderboard";
 			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &leaderboard::leaderboard_FormClosing);
 			this->ResumeLayout(false);
@@ -506,8 +506,11 @@ namespace OOPProject {
 		}
 
 		private: void shiftRight(int p) {
-			for (int i = p; p < posNums - 1; p++)
-				posNames[i + 1] = posNames[i], posScores[i + 1] = posScores[i];
+			for (int i = posNums - 1; i >= p; i--)
+				if(i <= 3)
+					posNames[i + 1] = posNames[i], posScores[i + 1] = posScores[i];
+			if (posNums < 5)
+				posNums++;
 		}
 
 		public: void ClrStringToStdString(std::string& outStr, String^ str) {

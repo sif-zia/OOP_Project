@@ -23,6 +23,8 @@ namespace OOPProject {
 			//
 			//TODO: Add the constructor code here
 			//
+			soundEffects = gcnew System::Media::SoundPlayer;
+			soundEffects->SoundLocation = L"start.wav";
 		}
 
 	protected:
@@ -40,6 +42,7 @@ namespace OOPProject {
 	private: System::Windows::Forms::Button^ easy_btn;
 	private: System::Windows::Forms::Button^ medm_btn;
 	private: System::Windows::Forms::Button^ hard_btn;
+	private: System::Media::SoundPlayer^ soundEffects;
 
 
 
@@ -134,6 +137,7 @@ namespace OOPProject {
 			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			this->MaximizeBox = false;
 			this->Name = L"menu";
+			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"Minesweeper";
 			this->Load += gcnew System::EventHandler(this, &menu::menu_Load);
 			this->ResumeLayout(false);
@@ -141,8 +145,10 @@ namespace OOPProject {
 		}
 #pragma endregion
 	private: System::Void menu_Load(System::Object^ sender, System::EventArgs^ e) {
+		soundEffects->Play();
 	}
 	private: System::Void easy_btn_Click(System::Object^ sender, System::EventArgs^ e) {
+		soundEffects->Play();
 		this->Hide();
 		MyForm^ form = gcnew MyForm(0);
 		form->ShowDialog();
@@ -150,6 +156,7 @@ namespace OOPProject {
 		this->Show();
 	}
 	private: System::Void medm_btn_Click(System::Object^ sender, System::EventArgs^ e) {
+		soundEffects->Play();
 		this->Hide();
 		MyForm^ form = gcnew MyForm(1);
 		form->ShowDialog();
@@ -157,6 +164,7 @@ namespace OOPProject {
 		this->Show();
 	}
 	private: System::Void hard_btn_Click(System::Object^ sender, System::EventArgs^ e) {
+		soundEffects->Play();
 		this->Hide();
 		MyForm^ form = gcnew MyForm(2);
 		form->ShowDialog();
