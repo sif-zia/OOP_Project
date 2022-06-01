@@ -325,6 +325,8 @@ namespace OOPProject {
 		for (int i = 0; i < no_of_mines; i++) {
 			cells[mine_locs[i, 0], mine_locs[i, 1]]->btn->Visible = false;
 			cells[mine_locs[i, 0], mine_locs[i, 1]]->is_exposed = true;
+			if (cells[mine_locs[i, 0], mine_locs[i, 1]]->is_flagged == true)
+				cells[mine_locs[i, 0], mine_locs[i, 1]]->exp_cel->Image = Image::FromFile("mine_crossed.jpeg");
 		}
 	}
 

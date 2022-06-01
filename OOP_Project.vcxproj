@@ -166,6 +166,7 @@
     <Image Include="flag.png" />
     <Image Include="Happy.png" />
     <Image Include="mine.jpeg" />
+    <Image Include="mine_crossed.jpeg" />
     <Image Include="mine_red.jpeg" />
     <Image Include="scared.png" />
     <Image Include="win.png" />
