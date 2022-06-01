@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <ctime>
 #include "Cell.h"
+#include "leaderboard.h"
 
 
 namespace OOPProject {
@@ -26,6 +27,7 @@ namespace OOPProject {
 			//
 			//TODO: Add the constructor code here
 			//
+			game_mode = mode;
 			cells = nullptr;
 			mine_locs = nullptr;
 			if (mode == 0)
@@ -48,7 +50,7 @@ namespace OOPProject {
 			}
 		}
 
-	private: int Cols, Rows, cell_size, no_of_mines, total_unmined_cells, cells_exposed, flag_count, seconds_count;
+	private: int Cols, Rows, cell_size, no_of_mines, total_unmined_cells, cells_exposed, flag_count, seconds_count, game_mode;
 	private: cli::array<Cell^, 2>^ cells;
 	private: cli::array<int, 2>^ mine_locs;
 	private: bool is_game_over;
@@ -355,6 +357,8 @@ namespace OOPProject {
 					is_game_over = true;
 					React->BackgroundImage = Image::FromFile("win.png");
 					timer->Enabled = false;
+					leaderboard l(game_mode, seconds_count);
+					l.ShowDialog();
 				}
 			}
 			else if (e->Button == System::Windows::Forms::MouseButtons::Right) {

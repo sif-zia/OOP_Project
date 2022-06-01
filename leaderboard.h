@@ -1,4 +1,6 @@
 #pragma once
+#include <string>
+#include <fstream>
 
 namespace OOPProject {
 
@@ -15,12 +17,70 @@ namespace OOPProject {
 	public ref class leaderboard : public System::Windows::Forms::Form
 	{
 	public:
-		leaderboard(void)
-		{
+		leaderboard(int mode, int score)
+		{	
+			
 			InitializeComponent();
 			//
 			//TODO: Add the constructor code here
 			//
+			game_mode = mode;
+
+			if (mode == 0)
+				filename = gcnew String("easy.dat"), mode_name_lbl->Text = L"Easy Mode:";
+			else if (mode == 1)
+				filename = gcnew String("medium.dat"), mode_name_lbl->Text = L"Medium Mode:";
+			else if (mode == 2)
+				filename = gcnew String("hard.dat"), mode_name_lbl->Text = L"Hard Mode:";
+
+			std::string file;
+			ClrStringToStdString(file, filename);
+			std::ifstream fin;
+			fin.open(file.c_str());
+
+			std::string tempStr;
+			std::getline(fin, tempStr);
+			posNums = std::stoi(tempStr);
+
+			posNames = gcnew cli::array<String^>(5);
+			posScores = gcnew cli::array<int>(5);
+
+			for (int i = 0; i < posNums; i++) {
+				std::getline(fin, tempStr);
+				posNames[i] = gcnew String(tempStr.c_str());
+				std::getline(fin, tempStr);
+				posScores[i] = std::stoi(tempStr);
+			}
+
+			fin.close();
+
+			for (int i = 0; i < posNums; i++)
+				show_pos(posScores[i], posNames[i], i + 1);
+
+			should_add = false;
+			curPos = -1;
+			curScore = score;
+
+			for (int i = 0; i < posNums && should_add == false; i++) {
+				if (score < posScores[i])
+					curPos = i, should_add = true;
+			}
+
+			if (should_add == true && posNums < 5)
+				posNums++;
+
+
+			if (should_add == false && posNums < 5) {
+				curPos = posNums, posNums++, should_add = true;
+			}
+
+			newName->Enabled = true;
+			submit_btn->Enabled = true;
+
+			if (should_add == true)
+				Msg_lbl->Text = L"Congrats! You got " + (curPos+1).ToString() + L" position.";
+			else
+				Msg_lbl->Text = L"Better Luck Next Time!";
 		}
 
 	protected:
@@ -57,6 +117,13 @@ namespace OOPProject {
 	private: System::Windows::Forms::TextBox^ newName;
 	private: System::Windows::Forms::Label^ Msg_lbl;
 	private: System::Windows::Forms::Button^ submit_btn;
+
+	private: String^ filename;
+	private: cli::array<String^>^ posNames;
+	private: cli::array<int>^ posScores;
+	private: int posNums, curPos, curScore, game_mode;
+	private: bool should_add, submitted;
+
 
 	private:
 		/// <summary>
@@ -103,7 +170,7 @@ namespace OOPProject {
 				static_cast<System::Byte>(0)));
 			this->mode_name_lbl->Location = System::Drawing::Point(19, 9);
 			this->mode_name_lbl->Name = L"mode_name_lbl";
-			this->mode_name_lbl->Size = System::Drawing::Size(107, 48);
+			this->mode_name_lbl->Size = System::Drawing::Size(103, 45);
 			this->mode_name_lbl->TabIndex = 0;
 			this->mode_name_lbl->Text = L"Mode";
 			// 
@@ -348,6 +415,7 @@ namespace OOPProject {
 			this->submit_btn->TabIndex = 21;
 			this->submit_btn->Text = L"Submit";
 			this->submit_btn->UseVisualStyleBackColor = true;
+			this->submit_btn->Click += gcnew System::EventHandler(this, &leaderboard::submit_btn_Click);
 			// 
 			// leaderboard
 			// 
@@ -379,10 +447,122 @@ namespace OOPProject {
 			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			this->Name = L"leaderboard";
 			this->Text = L"Leaderboard";
+			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &leaderboard::leaderboard_FormClosing);
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
 		}
 #pragma endregion
-	};
+
+		private: void change_visibility(int i) {
+			if (i == 1)
+				if (posName1_lbl->Visible == false)
+					posName1_lbl->Visible = true, posScore1_lbl->Visible = true;
+				else
+					posName1_lbl->Visible = false, posScore1_lbl->Visible = false;
+			else if(i == 2)
+				if (posName2_lbl->Visible == false)
+					posName2_lbl->Visible = true, posScore2_lbl->Visible = true;
+				else
+					posName2_lbl->Visible = false, posScore2_lbl->Visible = false;
+			else if (i == 3)
+				if (posName3_lbl->Visible == false)
+					posName3_lbl->Visible = true, posScore3_lbl->Visible = true;
+				else
+					posName3_lbl->Visible = false, posScore3_lbl->Visible = false;
+			else if (i == 4)
+				if (posName4_lbl->Visible == false)
+					posName4_lbl->Visible = true, posScore4_lbl->Visible = true;
+				else
+					posName4_lbl->Visible = false, posScore4_lbl->Visible = false;
+			else if (i == 5)
+				if (posName5_lbl->Visible == false)
+					posName5_lbl->Visible = true, posScore5_lbl->Visible = true;
+				else
+					posName5_lbl->Visible = false, posScore5_lbl->Visible = false;
+		}
+
+		private: void show_pos(int score, String^ name, int pos) {
+			if (pos == 1) {
+				posName1_lbl->Visible = true, posScore1_lbl->Visible = true;
+				posName1_lbl->Text = name, posScore1_lbl->Text = score.ToString(L"D3");
+			}
+			else if (pos == 2) {
+				posName2_lbl->Visible = true, posScore2_lbl->Visible = true;
+				posName2_lbl->Text = name, posScore2_lbl->Text = score.ToString(L"D3");
+			}
+			else if (pos == 3) {
+				posName3_lbl->Visible = true, posScore3_lbl->Visible = true;
+				posName3_lbl->Text = name, posScore3_lbl->Text = score.ToString(L"D3");
+			}
+			else if (pos == 4) {
+				posName4_lbl->Visible = true, posScore4_lbl->Visible = true;
+				posName4_lbl->Text = name, posScore4_lbl->Text = score.ToString(L"D3");
+			}
+			else if (pos == 5) {
+				posName5_lbl->Visible = true, posScore5_lbl->Visible = true;
+				posName5_lbl->Text = name, posScore5_lbl->Text = score.ToString(L"D3");
+			}
+		}
+
+		private: void shiftRight(int p) {
+			for (int i = p; p < posNums - 1; p++)
+				posNames[i + 1] = posNames[i], posScores[i + 1] = posScores[i];
+		}
+
+		public: void ClrStringToStdString(std::string& outStr, String^ str) {
+			IntPtr ansiStr = System::Runtime::InteropServices::Marshal::StringToHGlobalAnsi(str);
+			outStr = (const char*)ansiStr.ToPointer();
+			System::Runtime::InteropServices::Marshal::FreeHGlobal(ansiStr);
+		}
+
+	private: System::Void submit_btn_Click(System::Object^ sender, System::EventArgs^ e) {
+
+		if (should_add == true) {
+			shiftRight(curPos);
+			posScores[curPos] = curScore;
+			String^ tempSystemString = gcnew String(newName->Text);
+			posNames[curPos] = tempSystemString;
+			submitted = true;
+		}
+
+		for (int i = 0; i < posNums; i++)
+			show_pos(posScores[i], posNames[i], i + 1);
+
+		submit_btn->Enabled = false;
+		newName->Enabled = false;
+	}
+private: System::Void leaderboard_FormClosing(System::Object^ sender, System::Windows::Forms::FormClosingEventArgs^ e) {
+	if (submitted == false && should_add == true) {
+		shiftRight(curPos);
+		posScores[curPos] = curScore;
+		String^ tempSystemString = gcnew String(newName->Text);
+		posNames[curPos] = tempSystemString;
+		submitted = true;
+	}
+
+	if (game_mode == 0)
+		filename = gcnew String("easy.dat"), mode_name_lbl->Text = L"Easy Mode:";
+	else if (game_mode == 1)
+		filename = gcnew String("medium.dat"), mode_name_lbl->Text = L"Medium Mode:";
+	else if (game_mode == 2)
+		filename = gcnew String("hard.dat"), mode_name_lbl->Text = L"Hard Mode:";
+
+	std::string file;
+	ClrStringToStdString(file, filename);
+	std::ofstream fout;
+	fout.open(file.c_str());
+
+	std::string tempStr;
+
+	fout << posNums << std::endl;
+	for (int i = 0; i < posNums; i++) {
+		ClrStringToStdString(tempStr, posNames[i]);
+		fout << tempStr << std::endl;
+		fout << posScores[i] << std::endl;
+	}
+
+	fout.close();
+}
+};
 }

@@ -105,5 +105,14 @@
     <None Include=".gitignore">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="easy.dat">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="hard.dat">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="medium.dat">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
