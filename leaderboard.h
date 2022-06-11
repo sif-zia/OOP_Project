@@ -544,13 +544,6 @@ private: System::Void leaderboard_FormClosing(System::Object^ sender, System::Wi
 		submitted = true;
 	}
 
-	if (game_mode == 0)
-		filename = gcnew String("easy.dat"), mode_name_lbl->Text = L"Easy Mode:";
-	else if (game_mode == 1)
-		filename = gcnew String("medium.dat"), mode_name_lbl->Text = L"Medium Mode:";
-	else if (game_mode == 2)
-		filename = gcnew String("hard.dat"), mode_name_lbl->Text = L"Hard Mode:";
-
 	std::string file;
 	ClrStringToStdString(file, filename);
 	std::ofstream fout;
